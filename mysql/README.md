@@ -49,6 +49,16 @@ mysql8的版本对加密规则进行了修改，mysql8 之前的版本中加密�
 
 5. 执行sql `flush privileges;` 刷新权限
 
-### 其他添加远程操作权限
+### 其他添加远程操作权限方式
 
 执行sql `update user set host='%' where user='root';`
+
+### Dockerfile方式安装mysql8
+
+1. 在当前目录执行 `docker build -t zzycreate/mysql .`，当前目录有 Dockerfile 和执行脚本，此命令会创建一个 image，用于下一步的容器创建。privileges.sql 会给root赋予 mysql_native_password 加密登录方式，设置密码，并赋予远程权限。
+
+2. 执行以下命令直接运行上一步封装好的image：
+
+```
+docker run --name local-mysql -p 3306:3306 -v E:\docker_data\mysql\conf:/etc/mysql/conf.d -v E:\docker_data\mysql\data:/var/lib/mysql -v E:\docker_data\mysql\logs:/logs -d zzycreate/mysql --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci 
+```
